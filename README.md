@@ -25,6 +25,7 @@ Agent pipeline has three steps:<br>
     2. Identifying hard unanswerable questions.<br>
     3. Filtering out answerable questions.<br>
 ### Step 1
+
 This step is mostly adopted from the repository of [DrQA](https://github.com/facebookresearch/DrQA) by [Danqi Chen et al., 2017](https://aclanthology.org/P17-1171/).
 
 Code for this step is in `src/step1`. Refer to `src/step1/README.md` for further instructions.
