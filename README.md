@@ -23,7 +23,8 @@ pip install -r requirements.txt
 Agent pipeline has three steps:<br>
     1. Matching questions with new contexts.<br>
     2. Identifying hard unanswerable questions.<br>
-    3. Filtering out answerable questions.<br>
+    3. Filtering out answerable questions.
+    
 ### Step 1
 
 This step is mostly adopted from the repository of [DrQA](https://github.com/facebookresearch/DrQA) by [Danqi Chen et al., 2017](https://aclanthology.org/P17-1171/).
