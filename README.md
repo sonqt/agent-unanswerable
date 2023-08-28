@@ -7,7 +7,8 @@ This repository contains the source code for the AGent pipeline described in the
 >The UIT NLP Group, Vietnam National University, Ho Chi Minh City<br>
 >University of Texas at Dallas
 
-![The AGent pipeline for generating challenging high-quality unanswerable questions in Extractive Question Answering given a dataset with answerable questions. The six models used in this pipeline are the base and large versions of BERT, RoBERTa, and SpanBERT. In step 3 of the pipeline, the blue dots represent the calculated values (using formula in step 3) for unanswerable questions, while the red dots represent the calculated values for answerable questions. The threshold for discarding questions from the final extracted set of unanswerable questions is determined by finding the minimum value among all answerable questions. Any question with a calculated value greater than the threshold will not be included in our final extracted set.](pipeline.png)
+<img src="pipeline.png" alt="Pipeline" width="1300"/>
+
 ## 1. Getting Started
 ```
 conda create -n agent -y python=3.9.12
@@ -18,7 +19,7 @@ pip install -r requirements.txt
 ## 2. Preparing Data
 
 ## 3. AGent
-![Examples of an answerable question $Q1$ from SQuAD 1.1, and two unanswerable questions $Q2$ from SQuAD 2.0 and $Q3$ from SQuAD *AGent*. In SQuAD 2.0,  crowdworkers create unanswerable questions by replacing ``large numbers'' with ``decimal digits.'' On the other hand, our automated *AGent* pipeline matches the original question $Q1$, now $Q3$, with a new context $C3$. The pair $C3-Q3$ is unanswerable as context $C3$ does not indicate whether the **trial division** can **conveniently** test the primality of **large** numbers.](example.png)
+<img src="example.png" alt="Example" width="800"/>
 Agent pipeline has three steps:<br>
     1. Matching questions with new contexts.<br>
     2. Identifying hard unanswerable questions.<br>
