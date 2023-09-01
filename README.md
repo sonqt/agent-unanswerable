@@ -18,6 +18,8 @@ pip install -r requirements.txt
 
 ## 2. Preparing Data
 
+
+
 ## 3. AGent
 <img src="example.png" alt="Example" width="800"/>
 Agent pipeline has three steps:<br>
@@ -26,6 +28,31 @@ Agent pipeline has three steps:<br>
     3. Filtering out answerable questions.
     
 ### Step 1
+
+Assume the input dataset is `data.json`
+
+```
+agent-unanswerable/src/step1/command/phase1.sh
+```
+
+with the following arguments:
+
+```
+    --dataset_path ${DATASET_PATH} \
+    --save_path ${SAVE_PATH} \
+    --top_k 10 \
+    --gt_score False \
+    --num_unanswerable 300
+```
+
+The unanswerable candidates will be saved as:
+
+```
+unans_candidate/TF-IDF/retriever_component/unans_cdd/data_cdd.json
+```
+
+Then it will be combined with the original answerable dataset and will be saved under `--save_path`
+
 
 This step is mostly adopted from the repository of [DrQA](https://github.com/facebookresearch/DrQA) by [Danqi Chen et al., 2017](https://aclanthology.org/P17-1171/).
 
