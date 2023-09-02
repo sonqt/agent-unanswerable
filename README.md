@@ -26,13 +26,16 @@ Agent pipeline has three steps:<br>
     1. Matching questions with new contexts.<br>
     2. Identifying hard unanswerable questions.<br>
     3. Filtering out answerable questions.
-    
-### Step 1
 
-Assume the input dataset is `data.json`
+Note: this README is written as an example for creating SQuAD AGent. The SQuAD train and dev sets are saved at `src/step1/data/SQuAD/original/squad_train.json` and `src/step1/data/SQuAD/original/squad_dev.json`
+
+### Step 1
+Code for this step is in `src/step1`. Refer to `src/step1/README.md` for further instructions.
+
 
 ```
-agent-unanswerable/src/step1/command/phase1.sh
+cd src/step1
+command/phase1.sh
 ```
 
 with the following arguments:
@@ -48,22 +51,88 @@ with the following arguments:
 The unanswerable candidates will be saved as:
 
 ```
-unans_candidate/TF-IDF/retriever_component/unans_cdd/data_cdd.json
+src/step1/retriever_component/unans_cdd/{dataset_name}_data_cdd.json
 ```
 
-Then it will be combined with the original answerable dataset and will be saved under `--save_path`
+The training file for adversarial models in step 2 is created by combining newly created unanswerable questions with the original answerable dataset and will be saved under `--save_path`.
 
 
-This step is mostly adopted from the repository of [DrQA](https://github.com/facebookresearch/DrQA) by [Danqi Chen et al., 2017](https://aclanthology.org/P17-1171/).
+Code for this step is mostly adopted from the repository of [DrQA](https://github.com/facebookresearch/DrQA) by [Chen et al., (2017)](https://aclanthology.org/P17-1171/).
 
-Code for this step is in `src/step1`. Refer to `src/step1/README.md` for further instructions.
 ### Step 2
 #### Train Adversarial Models
-#### Get Challenging Unanswerable Candidates
-Use notebook `src/step2.ipynb` to finalize the Agent dataset
-### Step 3
-Use notebook `src/step3.ipynb` to tune the formula and finalize the Agent dataset
+The following command run in the original directory.
+```
+TRAIN_PATH="src/step1/data/SQuAD/adversarial/squad_train_step2.json"
+SAVE_PATH="Model/Adversarial_Models"
+for model in bert-base-cased bert-large-cased roberta-base roberta-large SpanBERT/spanbert-base-cased SpanBERT/spanbert-large-cased
+do 
+    python src/run_qa.py \
+        --model_name_or_path ${model} \
+        --train_file "${TRAIN_PATH}" \
+        --do_train \
+        --per_device_train_batch_size 8 \
+        --learning_rate 2e-5 \
+        --num_train_epochs 2 \
+        --max_seq_length 384 \
+        --max_answer_length 128 \
+        --doc_stride 128 \
+        --save_steps 999999 \
+        --overwrite_output_dir \
+        --version_2_with_negative \
+        --output_dir "${SAVE_PATH}/${model}"
+done
+```
+Then, get the predictions of adversarial models on unanswerable candidates created in Step 1.
+```
+MODEL_PATH="Model/Adversarial_Models"
+EVAL_PATH="src/step1/retriever_component/unans_cdd/squad_train_data_cdd.json"
+SAVE_PATH="Prediction/Adversarial_Models/SQuAD_Train"
+for model in bert-base-cased bert-large-cased roberta-base roberta-large SpanBERT/spanbert-base-cased SpanBERT/spanbert-large-cased
+do 
+    python src/run_qa.py \
+        --model_name_or_path "${MODEL_PATH}/${model}" \
+        --validation_file "${EVAL_PATH}" \
+        --do_eval \
+        --per_device_eval_batch_size 8 \
+        --max_seq_length 384 \
+        --max_answer_length 128 \
+        --doc_stride 128 \
+        --n_best_size 5 \
+        --overwrite_output_dir \
+        --version_2_with_negative \
+        --output_dir "${SAVE_PATH}/${model}"
+done
+```
 
+#### Get Challenging Unanswerable Candidates
+Use notebook `src/step2.ipynb` to finalize the Agent dataset.
+
+Modify the following code cell to use AGent on other dataset.
+```
+tfidf_path = "step1/retriever_component/unans_cdd/squad_train_unans_cdd.json"
+pred_path = "Prediction/Adversarial_Models"
+save_path = "step1/data/SQuAD/challenging_unans_candidate/squad_train.json"
+```
+### Step 3
+Use notebook `src/step3.ipynb` to tune the formula and finalize the Agent dataset.
+
+Modify the following code cell to use AGent on other dataset.
+```
+annotated_pred_path = "Prediction/Step3_Annotated"
+answerable_ids_path = "answerable_ids.json"
+
+full_pred_dev_path = "src/step1/retriever_component/unans_cdd/squad_dev_unans_cdd.json"      # path to predictions of the 6 adversarial models
+dev_path = "Prediction/Adversarial_Models/SQuAD_Dev"    # path to all challenging unanswerable candidates (product of step 2)
+squadv1_dev_path = "src/step1/data/SQuAD/original/squad_dev.json"
+save_dev_path = "AGent_data/SQuAD/dev.json"
+
+
+tfidf_train_path = "src/step1/retriever_component/unans_cdd/squad_train_unans_cdd.json"
+full_pred_train_path = "Prediction/Adversarial_Models/SQuAD_Train"
+squadv1_train_path = "src/step1/data/SQuAD/original/squad_train.json"
+save_train_path = "AGent_data/SQuAD/train.json"
+```
 ## Citation and Contact
 If you found this repository helpful, please cite:
 ```
