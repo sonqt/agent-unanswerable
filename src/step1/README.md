@@ -1,6 +1,6 @@
-# Step 1:
+# Step 1
 
-Use command/phase1.sh file to convert the answerable dataset int unanswerable candidate dataset (dataset_name_unans_cdd.json)
+Use command/step1.sh for step 1 ({dataset_name}_unans_cdd.json)
 
 ```
 python src/step1/main.py \
@@ -26,9 +26,3 @@ The flow of the dataset in phase 1 is presented as follows: <br>
     3. Save top_k contexts under `retriever_component/tfidf_data/relevant`
 3. The top_k context-question under `retriever_component/tfidf_data/relevant` is parsed through the `unans_cdd.py` file for re-formatting purposes. The final database of all unans_candidates is saved at `retriever_component/unans_cdd/`.
 4. The combine.py file is used to combine the answerable datasets with `--num_unanswerable` of the unanswerable candidates dataset to prepare for phase 2.
-# Step 2
-1. Train the models
-2. Get predictions
-3. Get adversarial unanswerable candidates
-# Step 3
-Tune the model and select qualified samples
