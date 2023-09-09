@@ -17,7 +17,7 @@ pip install -r requirements.txt
 ```
 
 ## 2. Preparing Data
-
+The original data should be in directory `src\step1\data\SQuAD\original`
 
 
 ## 3. AGent
