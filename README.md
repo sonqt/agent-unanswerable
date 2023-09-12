@@ -136,7 +136,14 @@ save_train_path = "AGent_data/SQuAD/train.json"
 ## Citation and Contact
 If you found this repository helpful, please cite:
 ```
-BibText here
+@misc{tran2023agent,
+      title={AGent: A Novel Pipeline for Automatically Creating Unanswerable Questions}, 
+      author={Son Quoc Tran and Gia-Huy Do and Phong Nguyen-Thuan Do and Matt Kretchmar and Xinya Du},
+      year={2023},
+      eprint={2309.05103},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
 ```
 Please contact Son Quoc Tran at `tran_s2@denison.edu` if you have any questions.
 
