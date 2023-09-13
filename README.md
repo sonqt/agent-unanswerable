@@ -57,7 +57,7 @@ src/step1/retriever_component/unans_cdd/{dataset_name}_data_cdd.json
 The training file for adversarial models in step 2 is created by combining newly created unanswerable questions with the original answerable dataset and will be saved under `--save_path`.
 
 
-Code for this step is mostly adopted from the repository of [DrQA](https://github.com/facebookresearch/DrQA) by [Chen et al., (2017)](https://aclanthology.org/P17-1171/).
+Acknowledgement: Code for this step is mostly adopted from the repository of [DrQA](https://github.com/facebookresearch/DrQA) by [Chen et al., (2017)](https://aclanthology.org/P17-1171/).
 
 ### Step 2
 #### Train Adversarial Models
